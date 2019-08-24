@@ -48,6 +48,36 @@ for conv in convList:
         answers.append(lineDict [conv[i+1]])
 
 
+#cleaning the text
+def clean_text(text):
+    text=text.lower()
+    text= re.sub(r"i'm", "i am",text )
+    text= re.sub(r"he's", "he is",text )
+    text= re.sub(r"she's", "she is",text )
+    text= re.sub(r"what's", "what is",text )
+    text= re.sub(r"where's", "where is",text )
+    text= re.sub(r"\'ll", "will",text )
+    text= re.sub(r"\'ve", "have",text )
+    text= re.sub(r"\'re", "are",text )
+    text= re.sub(r"\'d", "would",text)
+    text= re.sub(r"won't", "will not", text )
+    text= re.sub(r"can't", "cannot not", text )
+    text= re.sub(r"wouldn't", "would not", text )
+    text= re.sub(r"couldn't", "could not", text )
+    text= re.sub(r"[(){}',\"|+-_*!?.:;@#^&]", "", text )
+    return text
+
+clean_ques=[]
+for q in questions:
+    clean_ques.append(clean_text(q))
+
+
+clean_ans=[]
+for a in answers:
+    clean_ans.append(clean_text(a))
+
+
+
 
 
 
