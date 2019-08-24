@@ -28,12 +28,30 @@ for line in lines :
         lineDict[str[0]]= str[4]
 
 
-# dict of conversations
+# lis of conversations
 #do same as prev step
-convDict={}
+convList=[]
 
 for conv in conversations[:-1]:  #last row in dataset is empty
-    str= conv.split(' +++$+++ ')[-1].replace("'", "" ).replace(" ","")
+    str= conv.split(' +++$+++ ')[-1][1:-1].replace("'", "" ).replace(" ","")
+    convList.append(str.split(","))
+
+
+#Q&A bot : data separation
+
+questions=[]
+answers=[]
+
+for conv in convList:
+    for i in range(len(conv)-1):
+        questions.append(lineDict [conv[i]])
+        answers.append(lineDict [conv[i+1]])
+
+
+
+
+
+
 
 
 
