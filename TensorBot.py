@@ -1,0 +1,41 @@
+# uses conrnell university movie dialouge dataset
+
+
+import numpy as np
+import tensorflow as tf
+import re
+import time
+
+# import the dataset.
+# split the lines and conversations on new lines '\n'
+#preprocessing
+
+lines = open('movie_lines.txt', encoding='utf-8',
+             errors='ignore').read().split('\n')
+
+conversations= open('movie_conversations.txt', encoding='utf-8',
+                    errors= 'ignore').read().split('\n')
+
+
+#dictionary for lines mapping
+#split per line in +++$+++
+
+lineDict = {} #contains all the lines mapped to key index
+
+for line in lines :
+    str = line.split(' +++$+++ ')
+    if len(str)== 5:
+        lineDict[str[0]]= str[4]
+
+
+# dict of conversations
+#do same as prev step
+convDict={}
+
+for conv in conversations[:-1]:  #last row in dataset is empty
+    str= conv.split(' +++$+++ ')[-1].replace("'", "" ).replace(" ","")
+
+
+
+
+
