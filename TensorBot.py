@@ -64,7 +64,7 @@ def clean_text(text):
     text= re.sub(r"can't", "cannot not", text )
     text= re.sub(r"wouldn't", "would not", text )
     text= re.sub(r"couldn't", "could not", text )
-    text= re.sub(r"[(){}',\"|+-_*!?.:;@#^&]", "", text )
+    text= re.sub(r"[`~$(){}',\"|+-_*!?.:;@#^&]", "", text )
     return text
 
 clean_ques=[]
@@ -77,7 +77,44 @@ for a in answers:
     clean_ans.append(clean_text(a))
 
 
+#word count
+wordCount={}
 
+for q in clean_ques:
+    for word  in q.split():
+        if word not in wordCount:
+            wordCount[word]=1
+        else:
+            wordCount[word] +=1
+
+
+for a in clean_ans:
+    for word  in a.split():
+        if word not in wordCount:
+            wordCount[word]=1
+        else:
+            wordCount[word] +=1
+
+
+#thresholding : a hyperparameter 15-20
+threshold=15
+ques_words={} # high frequency question words > threshold
+ans_words={} #same
+wi=0 #word index
+#some words have high freqency in question vice versa for answers
+
+for word,count in wordCount.items():
+    if count>=threshold:
+        ques_words[word]=wi
+        wi=wi+1
+
+
+wi=0
+
+for word,count in wordCount.items():
+    if count>=threshold:
+        ans_words[word]=wi
+        wi=wi+1
 
 
 
