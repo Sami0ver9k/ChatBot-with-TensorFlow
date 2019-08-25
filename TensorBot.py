@@ -133,12 +133,64 @@ for token in tokens:
 
 #swap dic akd= pppppppp'
 
-ansWordsToInts={indx:word  for  word,indx in ans_words.items() }
+swapped_ans_words={indx:word  for  word,indx in ans_words.items() }
 
 #adding eos to ans
 for i in range(len(clean_ans)):
     clean_ans[i] +=  ' <EOS>'
 
+#converting words into int for easy sorting
+
+ques_into_int=[]
+
+for q in   clean_ques:
+    intVals=[]
+    for word in q.split():
+        if word not in ques_words:
+            intVals.append(ques_words['<OUT>'])
+
+        else:
+            intVals.append(ques_words[word])
+
+    ques_into_int.append(intVals)
+
+
+
+ans_into_int=[]
+for a in   clean_ans:
+    intVals=[]
+    for word in a.split():
+        if word not in ans_words:
+            intVals.append(ques_words['<OUT>'])
+
+        else:
+            intVals.append(ques_words[word])
+
+    ans_into_int.append(intVals)
+
+
+#sorting
+clean_sorted_ques=[]
+sorted_index=[]
+clean_sorted_ans=[]
+
+list_of_sizes=[]
+
+for i in range (len(ques_into_int)):
+    list_of_sizes.append(len(ques_into_int[i]))
+
+
+max_ques_length=max(list_of_sizes)
+
+
+for length in range (1,30+1):
+    for obj in enumerate(ques_into_int):
+        if len(obj[1])==length:
+            clean_sorted_ques.append(ques_into_int[obj[0]])
+            clean_sorted_ans.append(ans_into_int[obj[0]])
+
+
+#end of text processing part
 
 
 
