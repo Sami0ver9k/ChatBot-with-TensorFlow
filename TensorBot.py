@@ -98,6 +98,7 @@ for a in clean_ans:
 
 #thresholding : a hyperparameter 15-20
 threshold=15
+
 ques_words={} # high frequency question words > threshold
 ans_words={} #same
 wi=0 #word index
@@ -117,6 +118,26 @@ for word,count in wordCount.items():
         wi=wi+1
 
 
+
+tokens=['<PAD>', '<EOS>', '<OUT>', '<SOS>']
+
+
+for token in tokens:
+    ques_words[token]=len(ques_words)+1
+
+
+for token in tokens:
+    ans_words[token]=len(ans_words)+1
+
+
+
+#swap dic akd= pppppppp'
+
+ansWordsToInts={indx:word  for  word,indx in ans_words.items() }
+
+#adding eos to ans
+for i in range(len(clean_ans)):
+    clean_ans[i] +=  ' <EOS>'
 
 
 
