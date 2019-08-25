@@ -193,6 +193,21 @@ for length in range (1,30+1):
 #end of text processing part
 
 
+###### tensorflow input
+
+def model_input():
+    train_input= tf.placeholder(tf.int32, [None,None], name='train_input')
+    target_output=tf.placeholder(tf.int32,[None,None], name='target_output')
+    learning_rate=tf.placeholder(tf.float32,name='learning_rate')
+    keep_prob=tf.placeholder(tf.float32,name='keep_prob')
+    return train_input, target_output, learning_rate, keep_prob
+
+
+
+
+
+
+
 
 
 
