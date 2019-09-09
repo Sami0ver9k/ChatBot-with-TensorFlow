@@ -207,6 +207,56 @@ def target_formatter(target_output, ans_words, batch_size):
          leftside=tf.fill([batch_size,1] , ans_words['<SOS>'] )
          rightside= tf.strided_slice(target_output, [0,0],  [batch_size, -1], [1,1] )
          formatted_targets=tf.concat(leftside,rightside,1)
+         return formatted_targets
+
+
+#encoder rnn layer
+def encoder_rnn_layer(rnn_input, rnn_size, num_of_layers, keep_prob, seq_length):
+    lstm= tf.contrib.rnn.BasicLSTMCell(rnn_size)
+    lstm_dropout= tf.contrib.rnn.DropoutWrapper(lstm,input_keep_prob=keep_prob)
+    encoder_cell=tf.contrib.rnn.MultiRNNCell([lstm_dropout] * num_of_layers)
+    non,encoder_state=tf.nn.bidirectional_dynamic_rnn(cell_fw=encoder_cell,
+                                                      cell_bw=encoder_cell,
+                                                      sequence_length=seq_length,
+                                                      inputs=rnn_input,
+                                                      dtype=tf.float32)
+    return encoder_state
+
+
+
+
+
+#decoder layer
+
+def decoder_training_set(encoder_state, decoder_cell, embedded_input, decoder_scope,sequence_length,
+                         output_func, keep_prob, batch_size):
+
+    attention_states=tf.zeros([batch_size, 1 , decoder_cell.output_size])
+    attention_keys,attention_values,attention_score_function,attention_construct_func= tf.contrib.seq2seq.prepare_attention(attention_states,
+                                                                                                                            attention_option='bahdanau',
+                                                                                                                            num_units=decoder_cell.output_size)
+
+    train_decoder_func= tf.contrib.seq2seq.attention_decoder_fn_train(encoder_state[0],
+                                                                      attention_keys,
+                                                                      attention_values,
+                                                                      attention_score_function,
+                                                                      attention_construct_func,
+                                                                      name="attn_decoder_train")
+
+    decoder_output,non,non=tf.contrib.seq2seq.dynamic_rnn_decoder(decoder_cell,
+                                                                  train_decoder_func,
+                                                                  embedded_input,
+                                                                  sequence_length,
+                                                                  scope=decoder_scope)
+
+    decoder_dropout=tf.nn.dropout(decoder_output,keep_prob)
+
+    return output_func(decoder_dropout)
+
+
+
+
+
 
 
 
